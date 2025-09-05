@@ -6,6 +6,7 @@ import heroAsset from "../../assets/player-body-with-head.png";
 import { Hero } from "../Hero";
 import { lerp } from "../../helpers/common";
 import { SizeType } from "../../types/common";
+import { FRAME_HEIGHT, FRAME_WIDTH } from "../../contstants/game-world";
 
 extend({
     Container,
@@ -39,8 +40,8 @@ export const MainContainer = ({ size, children }: PropsWithChildren<MainContaine
     return (
         <pixiContainer
             ref={containerRef}
-            x={lerp(containerRef.current ? containerRef.current.x : 0, size.width / 2 - heroPosition.x)}
-            y={lerp(containerRef.current ? containerRef.current.y : 0, size.height / 2 - heroPosition.y)}
+            x={lerp(containerRef.current ? containerRef.current.x : 0, size.width / 2 - heroPosition.x - FRAME_WIDTH / 2)}
+            y={lerp(containerRef.current ? containerRef.current.y : 0, size.height / 2 - heroPosition.y - FRAME_HEIGHT / 2)}
         >
             {tilesetTexture &&
                 <pixiTilingSprite

@@ -18,6 +18,7 @@ export const useHeroAnimation = ({ texture, frameWidth, frameHeight, totalFrames
     const [sprite, setSprite] = useState<Sprite>(createFrame(texture, deafaultColumn, deafaultRow, frameWidth, frameHeight));
     const frameRef = useRef(0);
     const elapsedTimeRef = useRef(0);
+    const lastRowDirection = useRef<number | null>(0);
 
     const createSprite = (row: number, column: number) => {
         const newSprite = createFrame(texture, column, row, frameWidth, frameHeight)
@@ -42,16 +43,21 @@ export const useHeroAnimation = ({ texture, frameWidth, frameHeight, totalFrames
         }
     }
 
-    const updateSprite = (direction: DirectionType | null, isMoving: boolean) => {
-        const row = getRowByDirection(direction);
-        let column = 0;
-        if (isMoving) {
+    const updateSprite = (direction: DirectionType | null) => {
+        if (!direction && !lastRowDirection.current) return;
+        let column = 0, row = getRowByDirection(null);
+        if (direction) {
+            row = getRowByDirection(direction);
+            lastRowDirection.current = row;
             elapsedTimeRef.current += animationSpeed;
             if (elapsedTimeRef.current >= 1) {
                 elapsedTimeRef.current = 0;
                 frameRef.current = (frameRef.current + 1) % totalFrames;
             }
-            column = frameRef.current;
+            column = frameRef.current === 0 ? 1 : frameRef.current;
+        } else if (lastRowDirection.current) {
+            row = lastRowDirection.current;
+            lastRowDirection.current = null;
         }
 
         const newSprite = createSprite(row, column);

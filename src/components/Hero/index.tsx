@@ -38,8 +38,8 @@ export const Hero = ({ texture, onMove, startPosition }: HeroPropsType) => {
             const newPos = calculateNewTarget(position.x, position.y, direction, ticker.deltaTime);
             setPosition(newPos);
             onMove(newPos.x, newPos.y);
-            updateSprite(direction, !!direction);
         }
+        updateSprite(direction);
     });
 
     return (
